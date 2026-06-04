@@ -14,9 +14,12 @@ builder.Services.AddMarten(options =>
     options.Schema.For<Job>().Identity(job => job.Id);
 });
 
+builder.Services.AddSingleton<IJobQueue, JobQueue>();
+builder.Services.AddHostedService<JobBackgroundService>();
+
 var app = builder.Build();
 
-app.MapPost("/jobs", async (IDocumentSession session, CancellationToken cancellationToken) =>
+app.MapPost("/jobs", async (IDocumentSession session, IJobQueue jobQueue, CancellationToken cancellationToken) =>
 {
     var job = new Job
     {
@@ -26,7 +29,9 @@ app.MapPost("/jobs", async (IDocumentSession session, CancellationToken cancella
     };
 
     session.Store(job);
+
     await session.SaveChangesAsync(cancellationToken);
+    await jobQueue.EnqueueAsync(job.Id, cancellationToken);
 
     return Results.Created($"/jobs/{job.Id}", new { jobId = job.Id });
 });
