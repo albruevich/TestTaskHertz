@@ -18,9 +18,13 @@ public class JobsApiClient
         return result?.JobId ?? throw new InvalidOperationException("The create job response did not contain a job id.");
     }
 
-    public Task<JobDto?> GetJobAsync(Guid jobId, CancellationToken cancellationToken = default)
+    public async Task<JobDto?> GetJobAsync(Guid jobId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        using var response = await httpClient.GetAsync($"/jobs/{jobId}", cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<JobDto>(cancellationToken);
     }
 
     private record CreateJobResponse(Guid JobId);

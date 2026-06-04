@@ -11,7 +11,7 @@
             FontAttributes="Bold"
             FontSize="28"
             HorizontalTextAlignment="Center"
-            Text="Task for Hertz"/>
+            Text="Тестове дла Герц"/>
         <Button
             x:Name="StartJobButton"
             BackgroundColor="#FF2B99ED"

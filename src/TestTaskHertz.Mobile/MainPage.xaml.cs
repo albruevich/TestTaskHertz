@@ -20,8 +20,11 @@ public partial class MainPage : ContentPage
         try
         {
             var jobId = await jobsApiClient.PostJobAsync();
+            var job = await jobsApiClient.GetJobAsync(jobId);
 
-            StatusLabel.Text = $"Job created: {jobId}";
+            StatusLabel.Text = job is null
+                ? $"Job created: {jobId}"
+                : $"ID: {job.Id}\nStatus: {job.Status}\nCreatedAt: {job.CreatedAt:HH:mm:ss}";
         }
         catch (Exception exception)
         {
