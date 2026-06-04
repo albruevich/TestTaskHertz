@@ -33,4 +33,13 @@ app.MapPost("/jobs", async (IDocumentSession session, CancellationToken cancella
     return Results.Created($"/jobs/{job.Id}", new { jobId = job.Id });
 });
 
+app.MapGet("/jobs/{id:guid}", async (Guid id, IQuerySession session, CancellationToken cancellationToken) =>
+{
+    var job = await session.LoadAsync<Job>(id, cancellationToken);
+
+    return job is null
+        ? Results.NotFound()
+        : Results.Ok(job);
+});
+
 app.Run();
