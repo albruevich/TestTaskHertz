@@ -2,7 +2,7 @@ using TestTaskHertz.Mobile.Models;
 
 namespace TestTaskHertz.Mobile.Services;
 
-public sealed class JobsApiClient
+public class JobsApiClient
 {
     public Task<Guid> CreateJobAsync(CancellationToken cancellationToken = default)
     {

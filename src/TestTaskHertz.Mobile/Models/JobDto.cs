@@ -1,6 +1,6 @@
 namespace TestTaskHertz.Mobile.Models;
 
-public sealed record JobDto(
+public record JobDto(
     Guid Id,
     JobStatus Status,
     DateTimeOffset CreatedAt,

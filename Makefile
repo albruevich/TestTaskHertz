@@ -1,4 +1,4 @@
-.PHONY: b f api restore build-api
+.PHONY: b f f-logs api restore build-api
 
 b api:
 	dotnet run --project src/TestTaskHertz.Api/TestTaskHertz.Api.csproj
@@ -22,6 +22,9 @@ f:
 	xcrun simctl terminate "$$UDID" com.testtaskhertz.mobile >/dev/null 2>&1 || true; \
 	xcrun simctl install "$$UDID" "$$APP"; \
 	xcrun simctl launch "$$UDID" com.testtaskhertz.mobile
+
+f-logs:
+	xcrun simctl spawn booted log stream --style compact --predicate 'process == "TestTaskHertz.Mobile"'
 
 restore:
 	dotnet restore TestTaskHertz.sln
