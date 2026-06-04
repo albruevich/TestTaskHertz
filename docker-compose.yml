@@ -1,0 +1,17 @@
+name: task-hertz
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: task-hertz-postgres
+    environment:
+      POSTGRES_DB: task_hertz
+      POSTGRES_USER: task_hertz
+      POSTGRES_PASSWORD: task_hertz
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
