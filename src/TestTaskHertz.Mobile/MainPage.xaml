@@ -13,15 +13,18 @@
             HorizontalTextAlignment="Center"
             Text="Task for Hertz"/>
         <Button
+            x:Name="StartJobButton"
             BackgroundColor="#FF2B99ED"
             Clicked="OnTestButtonClicked"
             CornerRadius="10"
             FontAttributes="Bold"
             HeightRequest="52"
+            HorizontalOptions="Center"
             WidthRequest="200"
             Text="Запустити задачу"
             TextColor="White"/>
         <Label
+            x:Name="StatusLabel"
             FontSize="18"
             HorizontalTextAlignment="Center"
             IsVisible="False"

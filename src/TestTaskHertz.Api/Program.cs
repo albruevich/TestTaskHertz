@@ -16,8 +16,6 @@ builder.Services.AddMarten(options =>
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
-
 app.MapPost("/jobs", async (IDocumentSession session, CancellationToken cancellationToken) =>
 {
     var job = new Job

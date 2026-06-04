@@ -1,19 +1,35 @@
-using System.Diagnostics;
+using TestTaskHertz.Mobile.Services;
 
 namespace TestTaskHertz.Mobile;
 
 public partial class MainPage : ContentPage
 {
+    private readonly JobsApiClient jobsApiClient = new();
+
     public MainPage()
     {
         InitializeComponent();
     }
 
-    private void OnTestButtonClicked(object? sender, EventArgs e)
+    private async void OnTestButtonClicked(object? sender, EventArgs e)
     {
-        var message = $"Test button clicked at {DateTimeOffset.Now:HH:mm:ss}";
+        StartJobButton.IsEnabled = false;
+        StatusLabel.IsVisible = true;
+        StatusLabel.Text = "Відправляю запит...";
 
-        Console.WriteLine(message);
-        Debug.WriteLine(message);
+        try
+        {
+            var jobId = await jobsApiClient.PostJobAsync();
+
+            StatusLabel.Text = $"Job created: {jobId}";
+        }
+        catch (Exception exception)
+        {
+            StatusLabel.Text = $"Request failed: {exception.Message}";
+        }
+        finally
+        {
+            StartJobButton.IsEnabled = true;
+        }
     }
 }
