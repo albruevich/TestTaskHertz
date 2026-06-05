@@ -2,10 +2,15 @@
 
 Прототип клієнт-серверної системи для відстеження тривалих фонових задач.
 
-Проєкт містить:
+Проєкт містить два застосунки:
 
-- `b` / backend: ASP.NET Core API, Marten, PostgreSQL, SignalR
-- `f` / frontend: мобільний застосунок .NET MAUI для iOS Simulator
+- **Backend (`src/TestTaskHertz.Api`)**: ASP.NET Core API, Marten, PostgreSQL, SignalR
+- **Mobile (`src/TestTaskHertz.Mobile`)**: .NET MAUI застосунок для iOS Simulator
+
+У `Makefile` є короткі команди для запуску:
+
+- `make b` запускає backend
+- `make f` запускає mobile app в iOS Simulator
 
 ## Що Робить Проєкт
 
@@ -36,7 +41,7 @@ Completed
 ## Вимоги
 
 - Docker Desktop
-- .NET SDK 10
+- .NET SDK 9
 - .NET MAUI workload
 - Xcode
 - iOS Simulator runtime
@@ -53,7 +58,6 @@ dotnet workload list
 ```text
 maui
 ios
-android
 ```
 
 Перевірити Xcode:
@@ -284,7 +288,7 @@ docker compose up -d
 Якщо VS Code показує застарілі MAUI/XAML помилки, але збірка з терміналу успішна:
 
 ```bash
-dotnet build src/TestTaskHertz.Mobile/TestTaskHertz.Mobile.csproj -f net10.0-ios -r iossimulator-arm64 --tl:off
+dotnet build src/TestTaskHertz.Mobile/TestTaskHertz.Mobile.csproj -f net9.0-ios -r iossimulator-arm64 --tl:off
 ```
 
 Потім перезавантажте VS Code:
