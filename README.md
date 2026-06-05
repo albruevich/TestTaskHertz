@@ -189,14 +189,6 @@ task_hertz
   <img src="docs/pg_admin.webp" alt="pgAdmin" width="500">
 </p>
 
-## Допоміжні Команди
-
-```bash
-make f-logs     # читати логи mobile app із simulator
-make restore    # відновити NuGet-пакети
-make build-api  # зібрати тільки backend
-```
-
 ## Нотатки
 
 Проєкт таргетить `.NET 9`, щоб відповідати вимогам тестового завдання.
