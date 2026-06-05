@@ -36,7 +36,7 @@ Completed
 ## Вимоги
 
 - Docker Desktop
-- .NET SDK 10
+- .NET SDK 9
 - .NET MAUI workload
 - Xcode
 - iOS Simulator runtime
@@ -45,15 +45,18 @@ Completed
 Перевірити встановлені .NET workloads:
 
 ```bash
+dotnet --list-sdks
+dotnet --list-runtimes
 dotnet workload list
 ```
+
+Для backend потрібні `Microsoft.NETCore.App 9.x` і `Microsoft.AspNetCore.App 9.x`.
 
 Очікувані workloads:
 
 ```text
 maui
 ios
-android
 ```
 
 Перевірити Xcode:
@@ -255,7 +258,7 @@ make build-api  # зібрати тільки backend
 
 ## Нотатки
 
-Проєкт зараз таргетить `.NET 10`, тому що був реалізований і протестований у локальному середовищі з .NET 10 SDK.
+Проєкт таргетить `.NET 9`, щоб відповідати вимогам тестового завдання.
 
 Мобільний проєкт містить тимчасові iOS build settings:
 
@@ -284,7 +287,7 @@ docker compose up -d
 Якщо VS Code показує застарілі MAUI/XAML помилки, але збірка з терміналу успішна:
 
 ```bash
-dotnet build src/TestTaskHertz.Mobile/TestTaskHertz.Mobile.csproj -f net10.0-ios -r iossimulator-arm64 --tl:off
+dotnet build src/TestTaskHertz.Mobile/TestTaskHertz.Mobile.csproj -f net9.0-ios -r iossimulator-arm64 --tl:off
 ```
 
 Потім перезавантажте VS Code:

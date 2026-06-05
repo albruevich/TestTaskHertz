@@ -1,10 +1,14 @@
+DOTNET_BACKEND ?= $(shell if [ -x /usr/local/opt/dotnet@9/libexec/dotnet ]; then echo /usr/local/opt/dotnet@9/libexec/dotnet; else echo dotnet; fi)
+DOTNET_MOBILE ?= dotnet
+
 .PHONY: b f f-logs api restore build-api
 
 b api:
-	dotnet run --project src/TestTaskHertz.Api/TestTaskHertz.Api.csproj
+	$(DOTNET_BACKEND) run --no-restore --project src/TestTaskHertz.Api/TestTaskHertz.Api.csproj
 
 f:
-	@UDID=$$(xcrun simctl list devices booted | awk -F'[()]' '/Booted/ {print $$2; exit}'); \
+	@set -e; \
+	UDID=$$(xcrun simctl list devices booted | awk -F'[()]' '/Booted/ {print $$2; exit}'); \
 	if [ -z "$$UDID" ]; then \
 		open -a Simulator; \
 		for i in $$(seq 1 30); do \
@@ -17,8 +21,8 @@ f:
 		echo "No booted iOS Simulator found."; \
 		exit 1; \
 	fi; \
-	APP="src/TestTaskHertz.Mobile/bin/Debug/net10.0-ios/iossimulator-arm64/TestTaskHertz.Mobile.app"; \
-	dotnet build src/TestTaskHertz.Mobile/TestTaskHertz.Mobile.csproj -f net10.0-ios -r iossimulator-arm64 --tl:off -v:q; \
+	APP="src/TestTaskHertz.Mobile/bin/Debug/net9.0-ios/iossimulator-arm64/TestTaskHertz.Mobile.app"; \
+	$(DOTNET_MOBILE) build src/TestTaskHertz.Mobile/TestTaskHertz.Mobile.csproj -f net9.0-ios -r iossimulator-arm64 --tl:off -v:q; \
 	xcrun simctl terminate "$$UDID" com.testtaskhertz.mobile >/dev/null 2>&1 || true; \
 	xcrun simctl install "$$UDID" "$$APP"; \
 	xcrun simctl launch "$$UDID" com.testtaskhertz.mobile
@@ -27,7 +31,7 @@ f-logs:
 	xcrun simctl spawn booted log stream --style compact --predicate 'process == "TestTaskHertz.Mobile"'
 
 restore:
-	dotnet restore TestTaskHertz.sln
+	$(DOTNET_MOBILE) restore TestTaskHertz.sln
 
 build-api:
-	dotnet build src/TestTaskHertz.Api/TestTaskHertz.Api.csproj
+	$(DOTNET_BACKEND) build src/TestTaskHertz.Api/TestTaskHertz.Api.csproj
