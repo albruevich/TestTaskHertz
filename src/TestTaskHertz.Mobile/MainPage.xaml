@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <Grid
         Padding="24"
-        RowDefinitions="*,70,80,90,*">
+        RowDefinitions="*,70,80,44,150,*">
         <Label
             Grid.Row="1"
             FontAttributes="Bold"
@@ -28,11 +28,31 @@
         <Label
             x:Name="StatusLabel"
             Grid.Row="3"
+            FontAttributes="Bold"
             FontSize="18"
             HorizontalTextAlignment="Center"
             IsVisible="False"
             LineBreakMode="WordWrap"
             Text="Status"
-            VerticalOptions="Start"/>
+            VerticalOptions="Center"/>
+        <VerticalStackLayout
+            Grid.Row="4"
+            Spacing="12"
+            VerticalOptions="Start">
+            <ActivityIndicator
+                x:Name="JobActivityIndicator"
+                Color="#FF2B99ED"
+                HeightRequest="28"
+                IsRunning="False"
+                IsVisible="False"
+                WidthRequest="28"/>
+            <Label
+                x:Name="ResultLabel"
+                FontSize="13"
+                HorizontalTextAlignment="Center"
+                IsVisible="False"
+                LineBreakMode="WordWrap"
+                Text="Result"/>
+        </VerticalStackLayout>
     </Grid>
 </ContentPage>
