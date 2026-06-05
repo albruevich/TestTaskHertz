@@ -1,4 +1,4 @@
-# TestTaskHertz
+# Тестове завдання для компанії Герц
 
 Прототип клієнт-серверної системи для відстеження тривалих фонових задач.
 
@@ -29,7 +29,7 @@ Completed
 - загальний час виконання
 - часові мітки `CreatedAt`, `StartedAt`, `FinishedAt`
 
-![iOS Simulator](docs/ios_simu.webp)
+![iOS Simulator](docs/ios_simu.webp width="400")
 
 ## Вимоги
 
