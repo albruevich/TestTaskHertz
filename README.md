@@ -7,11 +7,6 @@
 - **Backend (`src/TestTaskHertz.Api`)**: ASP.NET Core API, Marten, PostgreSQL, SignalR
 - **Mobile (`src/TestTaskHertz.Mobile`)**: .NET MAUI застосунок для iOS Simulator
 
-У `Makefile` є короткі команди для запуску:
-
-- `make b` запускає backend
-- `make f` запускає mobile app в iOS Simulator
-
 ## Що Робить Проєкт
 
 Мобільний застосунок створює фонову задачу на backend. Backend зберігає задачу в PostgreSQL через Marten, додає її у внутрішню чергу, обробляє через `BackgroundService` і надсилає оновлення статусу в мобільний застосунок через SignalR.
@@ -48,33 +43,13 @@ Makefile                   допоміжні команди
 docs                       скріншоти для README
 ```
 
-## Швидкий Старт
+## Запуск PostgreSQL
 
-З кореня репозиторію:
+Запустити локальний контейнер PostgreSQL:
 
 ```bash
 docker compose up -d
-dotnet restore TestTaskHertz.sln
-make b
 ```
-
-У другому терміналі:
-
-```bash
-make f
-```
-
-`make f`:
-
-1. Шукає запущений iOS Simulator
-2. Відкриває Simulator, якщо він ще не запущений
-3. Збирає MAUI-застосунок
-4. Встановлює застосунок у simulator
-5. Запускає застосунок
-
-## Запуск PostgreSQL
-
-Команда `docker compose up -d` зі швидкого старту запускає локальний контейнер PostgreSQL.
 
 Налаштування бази даних:
 
@@ -103,6 +78,12 @@ task-hertz-postgres
 </p>
 
 ## Запуск Backend
+
+Відновити NuGet-пакети:
+
+```bash
+dotnet restore TestTaskHertz.sln
+```
 
 Запустити backend:
 
@@ -211,8 +192,6 @@ task_hertz
 ## Допоміжні Команди
 
 ```bash
-make b          # запустити backend
-make f          # зібрати, встановити і запустити iOS app
 make f-logs     # читати логи mobile app із simulator
 make restore    # відновити NuGet-пакети
 make build-api  # зібрати тільки backend
@@ -220,7 +199,7 @@ make build-api  # зібрати тільки backend
 
 ## Нотатки
 
-Проєкт зараз таргетить `.NET 10`, тому що був реалізований і протестований у локальному середовищі з .NET 10 SDK.
+Проєкт таргетить `.NET 9`, щоб відповідати вимогам тестового завдання.
 
 Мобільний проєкт містить тимчасові iOS build settings:
 
