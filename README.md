@@ -45,6 +45,8 @@ docs                       скріншоти для README
 
 ## Запуск PostgreSQL
 
+Перед запуском переконайтеся, що Docker Desktop відкритий і Docker Engine вже запущений.
+
 Запустити локальний контейнер PostgreSQL:
 
 ```bash
@@ -211,7 +213,7 @@ lsof -nP -iTCP:5090 -sTCP:LISTEN
 kill <PID>
 ```
 
-Якщо PostgreSQL недоступна, переконайтеся, що Docker Desktop запущений, і перезапустіть базу:
+Якщо PostgreSQL недоступна, переконайтеся, що Docker Desktop відкритий і Docker Engine запущений, після цього перезапустіть базу:
 
 ```bash
 docker compose up -d
