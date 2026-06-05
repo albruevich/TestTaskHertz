@@ -74,11 +74,7 @@ make f
 
 ## Запуск PostgreSQL
 
-PostgreSQL запускається через Docker Compose:
-
-```bash
-docker compose up -d
-```
+Команда `docker compose up -d` зі швидкого старту запускає локальний контейнер PostgreSQL.
 
 Налаштування бази даних:
 
