@@ -38,41 +38,6 @@ Completed
   <img src="docs/ios_simu.webp" alt="iOS Simulator" width="300">
 </p>
 
-## Вимоги
-
-- Docker Desktop
-- .NET SDK 9
-- .NET MAUI workload
-- Xcode
-- iOS Simulator runtime
-- `make`
-
-Перевірити встановлені .NET workloads:
-
-```bash
-dotnet workload list
-```
-
-Очікувані workloads:
-
-```text
-maui
-ios
-```
-
-Перевірити Xcode:
-
-```bash
-xcodebuild -version
-xcode-select -p
-```
-
-Активна директорія розробника має вказувати на:
-
-```text
-/Applications/Xcode.app/Contents/Developer
-```
-
 ## Структура Проєкту
 
 ```text
