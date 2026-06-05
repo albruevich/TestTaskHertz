@@ -61,7 +61,7 @@ public class JobBackgroundService : BackgroundService
         await using var session = documentStore.LightweightSession();
         var job = await session.LoadAsync<Job>(jobId, cancellationToken);
 
-        if (job is null)
+        if (job == null)
         {
             logger.LogWarning("Job {JobId} was not found", jobId);
             return;

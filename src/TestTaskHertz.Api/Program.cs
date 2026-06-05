@@ -54,7 +54,7 @@ app.MapGet("/jobs/{id:guid}", async (Guid id, IQuerySession session, Cancellatio
     // Читаємо актуальний стан задачі з бази
     var job = await session.LoadAsync<Job>(id, cancellationToken);
 
-    return job is null ? Results.NotFound() : Results.Ok(job);
+    return job == null ? Results.NotFound() : Results.Ok(job);
 });
 
 // Реєструємо SignalR hub для підключення клієнтів

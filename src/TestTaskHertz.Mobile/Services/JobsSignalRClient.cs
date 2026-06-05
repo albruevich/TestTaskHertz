@@ -1,16 +1,41 @@
+using Microsoft.AspNetCore.SignalR.Client;
 using TestTaskHertz.Mobile.Models;
 
 namespace TestTaskHertz.Mobile.Services;
 
 public class JobsSignalRClient
 {
-    public Task ConnectAsync(CancellationToken cancellationToken = default)
+    private readonly HubConnection hubConnection;
+
+    public event Func<JobDto, Task>? JobChanged;
+
+    public JobsSignalRClient()
     {
-        throw new NotImplementedException();
+        // Створюємо підключення до SignalR hub на backend
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl($"{AppConfig.ApiBaseUrl}/jobsHub")
+            .WithAutomaticReconnect()
+            .Build();
+
+        // Обробляємо повідомлення JobChanged від backend
+        hubConnection.On<JobDto>("JobChanged", async job =>
+        {
+            if (JobChanged != null)
+            {
+                await JobChanged(job);
+            }
+        });
     }
 
-    public Task SubscribeToJobAsync(Guid jobId, CancellationToken cancellationToken = default)
+    public async Task ConnectToJobAsync(Guid jobId, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        if (hubConnection.State == HubConnectionState.Disconnected)
+        {
+            // Відкриваємо real-time підключення
+            await hubConnection.StartAsync(cancellationToken);
+        }
+
+        // Підписуємося на оновлення конкретної задачі
+        await hubConnection.InvokeAsync("SubscribeToJob", jobId, cancellationToken);
     }
 }

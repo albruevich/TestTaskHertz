@@ -5,7 +5,7 @@ namespace TestTaskHertz.Mobile.Services;
 
 public class JobsApiClient
 {
-    private readonly HttpClient httpClient = new() { BaseAddress = new Uri("http://localhost:5090") };
+    private readonly HttpClient httpClient = new() { BaseAddress = new Uri(AppConfig.ApiBaseUrl) };
 
     public async Task<Guid> PostJobAsync(CancellationToken cancellationToken = default)
     {
