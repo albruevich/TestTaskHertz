@@ -23,6 +23,9 @@ builder.Services.AddMarten(options =>
 builder.Services.AddSingleton<IJobQueue, JobQueue>();
 builder.Services.AddHostedService<JobBackgroundService>();
 
+// Додаємо SignalR для real-time оновлень статусу
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Реєструємо endpoint для створення задачі
@@ -53,5 +56,8 @@ app.MapGet("/jobs/{id:guid}", async (Guid id, IQuerySession session, Cancellatio
 
     return job is null ? Results.NotFound() : Results.Ok(job);
 });
+
+// Реєструємо SignalR hub для підключення клієнтів
+app.MapHub<JobsHub>("/jobsHub");
 
 app.Run();

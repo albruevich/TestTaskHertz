@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.SignalR;
 using Marten;
 
 namespace TestTaskHertz.Api.Jobs;
@@ -6,13 +7,15 @@ public class JobBackgroundService : BackgroundService
 {
     private readonly IJobQueue jobQueue;
     private readonly IDocumentStore documentStore;
+    private readonly IHubContext<JobsHub> hubContext;
     private readonly ILogger<JobBackgroundService> logger;
 
     // Конструктор викликається автоматично через DI
-    public JobBackgroundService(IJobQueue jobQueue, IDocumentStore documentStore, ILogger<JobBackgroundService> logger)
+    public JobBackgroundService(IJobQueue jobQueue, IDocumentStore documentStore, IHubContext<JobsHub> hubContext, ILogger<JobBackgroundService> logger)
     {
         this.jobQueue = jobQueue;
         this.documentStore = documentStore;
+        this.hubContext = hubContext;
         this.logger = logger;
     }
 
@@ -70,5 +73,8 @@ public class JobBackgroundService : BackgroundService
 
         session.Store(job);
         await session.SaveChangesAsync(cancellationToken);
+
+        // Надсилаємо клієнтам актуальний стан задачі через SignalR
+        await hubContext.Clients.Group($"job-{job.Id}").SendAsync("JobChanged", job, cancellationToken);
     }
 }
