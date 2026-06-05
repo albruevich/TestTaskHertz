@@ -1,37 +1,37 @@
 # TestTaskHertz
 
-Prototype client-server system for tracking long-running background jobs.
+Прототип клієнт-серверної системи для відстеження тривалих фонових задач.
 
-The project contains:
+Проєкт містить:
 
 - `b` / backend: ASP.NET Core API, Marten, PostgreSQL, SignalR
-- `f` / frontend: .NET MAUI mobile app for iOS Simulator
+- `f` / frontend: мобільний застосунок .NET MAUI для iOS Simulator
 
-## What It Does
+## Що Робить Проєкт
 
-The mobile app creates a background job on the backend. The backend saves the job in PostgreSQL through Marten, puts it into an in-memory queue, processes it in a `BackgroundService`, and sends status updates to the mobile app through SignalR.
+Мобільний застосунок створює фонову задачу на backend. Backend зберігає задачу в PostgreSQL через Marten, додає її у внутрішню чергу, обробляє через `BackgroundService` і надсилає оновлення статусу в мобільний застосунок через SignalR.
 
-Job lifecycle:
+Життєвий цикл задачі:
 
 ```text
 Created
-  -> wait 5 seconds
+  -> очікування 5 секунд
 InProgress
-  -> wait 5 seconds
+  -> очікування 5 секунд
 Completed
 ```
 
-The mobile app shows:
+Мобільний застосунок показує:
 
-- current status: `Очікування...`, `У роботі...`, `Готово!`
-- active `ActivityIndicator` while the job is running
-- job id
-- total execution time
-- timestamps for `CreatedAt`, `StartedAt`, `FinishedAt`
+- поточний статус: `Очікування...`, `У роботі...`, `Готово!`
+- активний `ActivityIndicator` під час виконання задачі
+- id задачі
+- загальний час виконання
+- часові мітки `CreatedAt`, `StartedAt`, `FinishedAt`
 
 ![iOS Simulator](docs/ios_simu.webp)
 
-## Requirements
+## Вимоги
 
 - Docker Desktop
 - .NET SDK 10
@@ -40,13 +40,13 @@ The mobile app shows:
 - iOS Simulator runtime
 - `make`
 
-Check .NET workloads:
+Перевірити встановлені .NET workloads:
 
 ```bash
 dotnet workload list
 ```
 
-Expected workloads include:
+Очікувані workloads:
 
 ```text
 maui
@@ -54,32 +54,32 @@ ios
 android
 ```
 
-Check Xcode:
+Перевірити Xcode:
 
 ```bash
 xcodebuild -version
 xcode-select -p
 ```
 
-The active developer directory should point to:
+Активна директорія розробника має вказувати на:
 
 ```text
 /Applications/Xcode.app/Contents/Developer
 ```
 
-## Project Structure
+## Структура Проєкту
 
 ```text
 src/TestTaskHertz.Api      backend API
 src/TestTaskHertz.Mobile   MAUI mobile app
-docker-compose.yml         local PostgreSQL
-Makefile                   helper commands
-docs                       screenshots for README
+docker-compose.yml         локальна PostgreSQL
+Makefile                   допоміжні команди
+docs                       скріншоти для README
 ```
 
-## Quick Start
+## Швидкий Старт
 
-From the repository root:
+З кореня репозиторію:
 
 ```bash
 docker compose up -d
@@ -87,29 +87,29 @@ dotnet restore TestTaskHertz.sln
 make b
 ```
 
-In a second terminal:
+У другому терміналі:
 
 ```bash
 make f
 ```
 
-`make f` will:
+`make f`:
 
-1. Find a booted iOS Simulator
-2. Open Simulator if needed
-3. Build the MAUI app
-4. Install the app into the simulator
-5. Launch the app
+1. Шукає запущений iOS Simulator
+2. Відкриває Simulator, якщо він ще не запущений
+3. Збирає MAUI-застосунок
+4. Встановлює застосунок у simulator
+5. Запускає застосунок
 
-## Run PostgreSQL
+## Запуск PostgreSQL
 
-PostgreSQL is started through Docker Compose:
+PostgreSQL запускається через Docker Compose:
 
 ```bash
 docker compose up -d
 ```
 
-The database settings are:
+Налаштування бази даних:
 
 ```text
 Host: localhost
@@ -119,13 +119,13 @@ User: task_hertz
 Password: task_hertz
 ```
 
-Check that the container is running:
+Перевірити, що контейнер запущений:
 
 ```bash
 docker ps
 ```
 
-Expected container:
+Очікуваний контейнер:
 
 ```text
 task-hertz-postgres
@@ -133,9 +133,9 @@ task-hertz-postgres
 
 ![Docker Desktop](docs/docker.webp)
 
-## Run Backend
+## Запуск Backend
 
-Start the backend:
+Запустити backend:
 
 ```bash
 make b
@@ -147,7 +147,7 @@ Backend URL:
 http://localhost:5090
 ```
 
-Available endpoints:
+Доступні endpoints:
 
 ```text
 POST /jobs
@@ -155,27 +155,27 @@ GET  /jobs/{id}
 SignalR /jobsHub
 ```
 
-## Test Backend From Terminal
+## Перевірка Backend З Терміналу
 
-Create a job:
+Створити задачу:
 
 ```bash
 curl -i -X POST http://localhost:5090/jobs
 ```
 
-Example response:
+Приклад відповіді:
 
 ```json
 {"jobId":"511bbf48-376d-4db5-9f26-4ff78b0722c5"}
 ```
 
-Read a job:
+Прочитати задачу:
 
 ```bash
 curl http://localhost:5090/jobs/511bbf48-376d-4db5-9f26-4ff78b0722c5
 ```
 
-The `status` value is an enum:
+Значення `status` є enum:
 
 ```text
 0 = Created
@@ -183,23 +183,23 @@ The `status` value is an enum:
 2 = Completed
 ```
 
-Wait a few seconds and call `GET /jobs/{id}` again to see the status and timestamps change.
+Зачекайте кілька секунд і викличте `GET /jobs/{id}` ще раз, щоб побачити зміну статусу і часових міток.
 
-## Run Mobile App
+## Запуск Мобільного Застосунку
 
-Start the iOS Simulator app:
+Запустити застосунок в iOS Simulator:
 
 ```bash
 make f
 ```
 
-Tap:
+Натиснути:
 
 ```text
 Запустити задачу
 ```
 
-Expected flow:
+Очікуваний flow:
 
 ```text
 Очікування...
@@ -207,13 +207,13 @@ Expected flow:
 Готово!
 ```
 
-The app uses normal HTTP requests for creating/reading the job and SignalR for real-time status updates.
+Застосунок використовує звичайні HTTP-запити для створення/читання задачі та SignalR для real-time оновлень статусу.
 
-## Inspect Database Optional
+## Перегляд Бази Даних Опційно
 
-You can inspect saved Marten documents in pgAdmin.
+Збережені Marten-документи можна переглянути в pgAdmin.
 
-Connection settings:
+Налаштування підключення:
 
 ```text
 Host: localhost
@@ -223,7 +223,7 @@ Username: task_hertz
 Password: task_hertz
 ```
 
-Marten creates a document table:
+Marten створює таблицю документів:
 
 ```text
 task_hertz
@@ -233,55 +233,55 @@ task_hertz
         -> mt_doc_job
 ```
 
-The `data` column stores the serialized `Job` document as `jsonb`.
+Колонка `data` зберігає серіалізований документ `Job` у форматі `jsonb`.
 
 ![pgAdmin](docs/pg_admin.webp)
 
-## Helper Commands
+## Допоміжні Команди
 
 ```bash
-make b          # run backend
-make f          # build, install and launch iOS app
-make f-logs     # stream mobile app logs from simulator
-make restore    # restore NuGet packages
-make build-api  # build backend only
+make b          # запустити backend
+make f          # зібрати, встановити і запустити iOS app
+make f-logs     # читати логи mobile app із simulator
+make restore    # відновити NuGet-пакети
+make build-api  # зібрати тільки backend
 ```
 
-## Notes
+## Нотатки
 
-The project currently targets `.NET 10` because it was implemented and tested in a local .NET 10 SDK environment.
+Проєкт зараз таргетить `.NET 10`, тому що був реалізований і протестований у локальному середовищі з .NET 10 SDK.
 
-The mobile project includes temporary iOS build settings:
+Мобільний проєкт містить тимчасові iOS build settings:
 
 ```xml
 <ValidateXcodeVersion>false</ValidateXcodeVersion>
 <MtouchLink>SdkOnly</MtouchLink>
 ```
 
-They are used to keep local iOS Simulator builds working when the installed .NET iOS workload expects a slightly newer Xcode minor version.
+Вони потрібні, щоб локальна збірка для iOS Simulator працювала, коли встановлений .NET iOS workload очікує трохи новішу minor-версію Xcode.
 
 ## Troubleshooting
 
-If backend port `5090` is already in use:
+Якщо backend port `5090` вже зайнятий:
 
 ```bash
 lsof -nP -iTCP:5090 -sTCP:LISTEN
 kill <PID>
 ```
 
-If PostgreSQL is not available, make sure Docker Desktop is running and restart the database:
+Якщо PostgreSQL недоступна, переконайтеся, що Docker Desktop запущений, і перезапустіть базу:
 
 ```bash
 docker compose up -d
 ```
 
-If VS Code shows stale MAUI/XAML errors but terminal build succeeds:
+Якщо VS Code показує застарілі MAUI/XAML помилки, але збірка з терміналу успішна:
 
 ```bash
 dotnet build src/TestTaskHertz.Mobile/TestTaskHertz.Mobile.csproj -f net10.0-ios -r iossimulator-arm64 --tl:off
 ```
 
-Then reload VS Code:
+Потім перезавантажте VS Code:
 
 ```text
 Cmd+Shift+P -> Developer: Reload Window
