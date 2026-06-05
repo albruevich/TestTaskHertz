@@ -30,7 +30,7 @@ Completed
 - часові мітки `CreatedAt`, `StartedAt`, `FinishedAt`
 
 <p style="margin: 24px 0;">
-  <img src="docs/ios_simu.webp" alt="iOS Simulator" width="400">
+  <img src="docs/ios_simu.webp" alt="iOS Simulator" width="300">
 </p>
 
 ## Вимоги
