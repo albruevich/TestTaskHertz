@@ -8,6 +8,7 @@ public class JobBackgroundService : BackgroundService
     private readonly IDocumentStore documentStore;
     private readonly ILogger<JobBackgroundService> logger;
 
+    // Конструктор викликається автоматично через DI
     public JobBackgroundService(IJobQueue jobQueue, IDocumentStore documentStore, ILogger<JobBackgroundService> logger)
     {
         this.jobQueue = jobQueue;
@@ -15,10 +16,12 @@ public class JobBackgroundService : BackgroundService
         this.logger = logger;
     }
 
+    // Метод запускається автоматично як фоновий сервіс
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
+            // Чекаємо наступну задачу з черги
             var jobId = await jobQueue.DequeueAsync(stoppingToken);
 
             try
@@ -38,10 +41,12 @@ public class JobBackgroundService : BackgroundService
 
     private async Task ProcessJobAsync(Guid jobId, CancellationToken cancellationToken)
     {
+        // Імітуємо очікування перед стартом задачі
         await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
 
         await UpdateJobAsync(jobId, JobStatus.InProgress, job => job.StartedAt = DateTimeOffset.UtcNow, cancellationToken);
 
+        // Імітуємо виконання задачі
         await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
 
         await UpdateJobAsync(jobId, JobStatus.Completed, job => job.FinishedAt = DateTimeOffset.UtcNow, cancellationToken);
@@ -49,6 +54,7 @@ public class JobBackgroundService : BackgroundService
 
     private async Task UpdateJobAsync(Guid jobId, JobStatus status, Action<Job> updateTimestamps, CancellationToken cancellationToken)
     {
+        // Відкриваємо сесію, щоб прочитати і зберегти Job у PostgreSQL
         await using var session = documentStore.LightweightSession();
         var job = await session.LoadAsync<Job>(jobId, cancellationToken);
 
@@ -58,6 +64,7 @@ public class JobBackgroundService : BackgroundService
             return;
         }
 
+        // Оновлюємо статус і часову мітку
         job.Status = status;
         updateTimestamps(job);
 

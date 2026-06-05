@@ -4,6 +4,7 @@ namespace TestTaskHertz.Api.Jobs;
 
 public class JobQueue : IJobQueue
 {
+    // Зберігаємо id задач у внутрішній асинхронній черзі
     private readonly Channel<Guid> channel = Channel.CreateUnbounded<Guid>();
 
     public ValueTask EnqueueAsync(Guid jobId, CancellationToken cancellationToken = default)

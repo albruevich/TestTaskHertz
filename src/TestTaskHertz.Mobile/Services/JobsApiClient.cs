@@ -9,6 +9,7 @@ public class JobsApiClient
 
     public async Task<Guid> PostJobAsync(CancellationToken cancellationToken = default)
     {
+        // Відправляємо запит на створення задачі
         using var response = await httpClient.PostAsync("/jobs", content: null, cancellationToken);
 
         response.EnsureSuccessStatusCode();
@@ -20,6 +21,7 @@ public class JobsApiClient
 
     public async Task<JobDto?> GetJobAsync(Guid jobId, CancellationToken cancellationToken = default)
     {
+        // Отримуємо актуальний стан задачі
         using var response = await httpClient.GetAsync($"/jobs/{jobId}", cancellationToken);
 
         response.EnsureSuccessStatusCode();

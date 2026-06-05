@@ -19,6 +19,7 @@ public partial class MainPage : ContentPage
 
         try
         {
+            // Створюємо задачу і одразу читаємо її стан
             var jobId = await jobsApiClient.PostJobAsync();
             var job = await jobsApiClient.GetJobAsync(jobId);
 
