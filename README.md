@@ -1,20 +1,46 @@
 # TestTaskHertz
 
-Learning/prototype project for a MAUI mobile client and ASP.NET Core backend.
+Prototype client-server system for tracking long-running background jobs.
 
-Current state:
+The project contains:
 
-- `b` = backend project: `src/TestTaskHertz.Api`
-- `f` = frontend/mobile project: `src/TestTaskHertz.Mobile`
+- `b` / backend: ASP.NET Core API, Marten, PostgreSQL, SignalR
+- `f` / frontend: .NET MAUI mobile app for iOS Simulator
+
+## What It Does
+
+The mobile app creates a background job on the backend. The backend saves the job in PostgreSQL through Marten, puts it into an in-memory queue, processes it in a `BackgroundService`, and sends status updates to the mobile app through SignalR.
+
+Job lifecycle:
+
+```text
+Created
+  -> wait 5 seconds
+InProgress
+  -> wait 5 seconds
+Completed
+```
+
+The mobile app shows:
+
+- current status: `Очікування...`, `У роботі...`, `Готово!`
+- active `ActivityIndicator` while the job is running
+- job id
+- total execution time
+- timestamps for `CreatedAt`, `StartedAt`, `FinishedAt`
+
+![iOS Simulator](docs/ios_simu.webp)
 
 ## Requirements
 
+- Docker Desktop
 - .NET SDK 10
 - .NET MAUI workload
 - Xcode
-- iOS Simulator runtime installed in Xcode
+- iOS Simulator runtime
+- `make`
 
-Check installed workloads:
+Check .NET workloads:
 
 ```bash
 dotnet workload list
@@ -41,41 +67,27 @@ The active developer directory should point to:
 /Applications/Xcode.app/Contents/Developer
 ```
 
-## Restore
+## Project Structure
 
-```bash
-dotnet restore TestTaskHertz.sln
+```text
+src/TestTaskHertz.Api      backend API
+src/TestTaskHertz.Mobile   MAUI mobile app
+docker-compose.yml         local PostgreSQL
+Makefile                   helper commands
+docs                       screenshots for README
 ```
 
-## Run Backend
+## Quick Start
 
 From the repository root:
 
 ```bash
+docker compose up -d
+dotnet restore TestTaskHertz.sln
 make b
 ```
 
-The backend starts on:
-
-```text
-http://localhost:5090
-```
-
-Current test endpoint:
-
-```text
-GET /
-```
-
-Expected response:
-
-```text
-Hello World!
-```
-
-## Run Frontend
-
-From the repository root:
+In a second terminal:
 
 ```bash
 make f
@@ -83,74 +95,194 @@ make f
 
 `make f` will:
 
-1. Check whether an iOS Simulator is already running.
-2. Open Simulator automatically if needed.
-3. Wait for a booted simulator.
-4. Build the MAUI app.
-5. Install it into the booted simulator.
-6. Launch the app.
+1. Find a booted iOS Simulator
+2. Open Simulator if needed
+3. Build the MAUI app
+4. Install the app into the simulator
+5. Launch the app
 
-Current expected screen:
+## Run PostgreSQL
+
+PostgreSQL is started through Docker Compose:
+
+```bash
+docker compose up -d
+```
+
+The database settings are:
 
 ```text
-TestTaskHertz
-Hello from f
+Host: localhost
+Port: 5432
+Database: task_hertz
+User: task_hertz
+Password: task_hertz
+```
+
+Check that the container is running:
+
+```bash
+docker ps
+```
+
+Expected container:
+
+```text
+task-hertz-postgres
+```
+
+![Docker Desktop](docs/docker.webp)
+
+## Run Backend
+
+Start the backend:
+
+```bash
+make b
+```
+
+Backend URL:
+
+```text
+http://localhost:5090
+```
+
+Available endpoints:
+
+```text
+POST /jobs
+GET  /jobs/{id}
+SignalR /jobsHub
+```
+
+## Test Backend From Terminal
+
+Create a job:
+
+```bash
+curl -i -X POST http://localhost:5090/jobs
+```
+
+Example response:
+
+```json
+{"jobId":"511bbf48-376d-4db5-9f26-4ff78b0722c5"}
+```
+
+Read a job:
+
+```bash
+curl http://localhost:5090/jobs/511bbf48-376d-4db5-9f26-4ff78b0722c5
+```
+
+The `status` value is an enum:
+
+```text
+0 = Created
+1 = InProgress
+2 = Completed
+```
+
+Wait a few seconds and call `GET /jobs/{id}` again to see the status and timestamps change.
+
+## Run Mobile App
+
+Start the iOS Simulator app:
+
+```bash
+make f
+```
+
+Tap:
+
+```text
+Запустити задачу
+```
+
+Expected flow:
+
+```text
+Очікування...
+У роботі...
+Готово!
+```
+
+The app uses normal HTTP requests for creating/reading the job and SignalR for real-time status updates.
+
+## Inspect Database Optional
+
+You can inspect saved Marten documents in pgAdmin.
+
+Connection settings:
+
+```text
+Host: localhost
+Port: 5432
+Maintenance database: task_hertz
+Username: task_hertz
+Password: task_hertz
+```
+
+Marten creates a document table:
+
+```text
+task_hertz
+  -> Schemas
+    -> public
+      -> Tables
+        -> mt_doc_job
+```
+
+The `data` column stores the serialized `Job` document as `jsonb`.
+
+![pgAdmin](docs/pg_admin.webp)
+
+## Helper Commands
+
+```bash
+make b          # run backend
+make f          # build, install and launch iOS app
+make f-logs     # stream mobile app logs from simulator
+make restore    # restore NuGet packages
+make build-api  # build backend only
 ```
 
 ## Notes
 
-The mobile project currently uses iOS simulator builds:
+The project currently targets `.NET 10` because it was implemented and tested in a local .NET 10 SDK environment.
 
-```text
-net10.0-ios
-iossimulator-arm64
-```
-
-The project includes temporary iOS build settings because the installed .NET iOS workload expects a newer Xcode minor version:
+The mobile project includes temporary iOS build settings:
 
 ```xml
 <ValidateXcodeVersion>false</ValidateXcodeVersion>
 <MtouchLink>SdkOnly</MtouchLink>
 ```
 
-These can be revisited after aligning Xcode and .NET iOS workload versions.
+They are used to keep local iOS Simulator builds working when the installed .NET iOS workload expects a slightly newer Xcode minor version.
 
-## Reviewer Friendliness Checklist
+## Troubleshooting
 
-Backend should be easy to verify from terminal:
+If backend port `5090` is already in use:
 
 ```bash
-make b
-curl http://localhost:5090/
+lsof -nP -iTCP:5090 -sTCP:LISTEN
+kill <PID>
 ```
 
-Mobile verification can require more local setup because MAUI/iOS depends on:
+If PostgreSQL is not available, make sure Docker Desktop is running and restart the database:
 
-- installed .NET SDK;
-- installed MAUI workload;
-- installed Xcode;
-- installed iOS Simulator runtime;
-- compatible .NET iOS workload and Xcode versions.
+```bash
+docker compose up -d
+```
 
-Before final submission, update this README with the exact tested environment:
+If VS Code shows stale MAUI/XAML errors but terminal build succeeds:
+
+```bash
+dotnet build src/TestTaskHertz.Mobile/TestTaskHertz.Mobile.csproj -f net10.0-ios -r iossimulator-arm64 --tl:off
+```
+
+Then reload VS Code:
 
 ```text
-macOS:
-.NET SDK:
-Xcode:
-iOS Simulator runtime:
-```
-
-Before final submission, make the project friendly for review:
-
-1. Keep backend runnable with one command.
-2. Keep mobile runnable with one command.
-3. Include clear setup commands.
-4. Include clear troubleshooting notes for MAUI/Xcode version mismatch.
-5. Include a screenshot of the working iOS Simulator app.
-6. Re-check whether temporary iOS settings can be removed:
-
-```xml
-<ValidateXcodeVersion>false</ValidateXcodeVersion>
-<MtouchLink>SdkOnly</MtouchLink>
+Cmd+Shift+P -> Developer: Reload Window
 ```
