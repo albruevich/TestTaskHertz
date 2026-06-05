@@ -29,7 +29,9 @@ Completed
 - загальний час виконання
 - часові мітки `CreatedAt`, `StartedAt`, `FinishedAt`
 
-<img src="docs/ios_simu.webp" alt="iOS Simulator" width="400">
+<p style="margin: 24px 0;">
+  <img src="docs/ios_simu.webp" alt="iOS Simulator" width="400">
+</p>
 
 ## Вимоги
 
@@ -131,7 +133,9 @@ docker ps
 task-hertz-postgres
 ```
 
-![Docker Desktop](docs/docker.webp)
+<p style="margin: 24px 0;">
+  <img src="docs/docker.webp" alt="Docker Desktop" width="500">
+</p>
 
 ## Запуск Backend
 
@@ -235,7 +239,9 @@ task_hertz
 
 Колонка `data` зберігає серіалізований документ `Job` у форматі `jsonb`.
 
-![pgAdmin](docs/pg_admin.webp)
+<p style="margin: 24px 0;">
+  <img src="docs/pg_admin.webp" alt="pgAdmin" width="500">
+</p>
 
 ## Допоміжні Команди
 
