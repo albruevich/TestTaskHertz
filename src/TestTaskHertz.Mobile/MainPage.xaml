@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <Grid
         Padding="24"
-        RowDefinitions="*,70,80,44,150,*">
+        RowDefinitions="10,60,60,34,44,48,170,*">
         <Label
             Grid.Row="1"
             FontAttributes="Bold"
@@ -25,9 +25,19 @@
             WidthRequest="200"
             Text="Запустити задачу"
             TextColor="White"/>
+        <ActivityIndicator
+            x:Name="JobActivityIndicator"
+            Grid.Row="4"
+            Color="#FF2B99ED"
+            HeightRequest="28"
+            HorizontalOptions="Center"
+            IsRunning="False"
+            Opacity="0"
+            VerticalOptions="Center"
+            WidthRequest="28"/>
         <Label
             x:Name="StatusLabel"
-            Grid.Row="3"
+            Grid.Row="5"
             FontAttributes="Bold"
             FontSize="18"
             HorizontalTextAlignment="Center"
@@ -36,16 +46,16 @@
             Text="Status"
             VerticalOptions="Center"/>
         <VerticalStackLayout
-            Grid.Row="4"
+            Grid.Row="6"
             Spacing="12"
             VerticalOptions="Start">
-            <ActivityIndicator
-                x:Name="JobActivityIndicator"
-                Color="#FF2B99ED"
-                HeightRequest="28"
-                IsRunning="False"
+            <Label
+                x:Name="IdLabel"
+                FontSize="9"
+                HorizontalTextAlignment="Center"
                 IsVisible="False"
-                WidthRequest="28"/>
+                LineBreakMode="WordWrap"
+                Text="ID"/>
             <Label
                 x:Name="ResultLabel"
                 FontSize="13"

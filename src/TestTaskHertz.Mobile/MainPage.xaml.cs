@@ -26,8 +26,9 @@ public partial class MainPage : ContentPage
 
         SetJobRunningState(true);
         StatusLabel.IsVisible = true;
+        IdLabel.IsVisible = false;
         ResultLabel.IsVisible = false;
-        JobActivityIndicator.IsVisible = true;
+        JobActivityIndicator.Opacity = 1;
         JobActivityIndicator.IsRunning = true;
         StatusLabel.Text = "Очікування...";
 
@@ -48,7 +49,7 @@ public partial class MainPage : ContentPage
         {
             StatusLabel.Text = $"Request failed: {exception.Message}";
             JobActivityIndicator.IsRunning = false;
-            JobActivityIndicator.IsVisible = false;
+            JobActivityIndicator.Opacity = 0;
             SetJobRunningState(false);
         }
     }
@@ -64,12 +65,14 @@ public partial class MainPage : ContentPage
     private void UpdateJobUi(JobDto job)
     {
         StatusLabel.Text = GetStatusText(job.Status);
+        IdLabel.IsVisible = true;
+        IdLabel.Text = $"ID: {job.Id}";
         ResultLabel.IsVisible = true;
         ResultLabel.Text = BuildResultText(job);
 
         var isCompleted = job.Status == JobStatus.Completed;
         JobActivityIndicator.IsRunning = !isCompleted;
-        JobActivityIndicator.IsVisible = !isCompleted;
+        JobActivityIndicator.Opacity = isCompleted ? 0 : 1;
         SetJobRunningState(!isCompleted);
     }
 
@@ -95,7 +98,8 @@ public partial class MainPage : ContentPage
     {
         var startedAt = job.StartedAt?.ToString("HH:mm:ss") ?? "-";
         var finishedAt = job.FinishedAt?.ToString("HH:mm:ss") ?? "-";
+        var totalTime = job.FinishedAt.HasValue ? (job.FinishedAt.Value - job.CreatedAt).TotalSeconds.ToString("0") + " sec" : "-";
 
-        return $"ID: {job.Id}\n\nCreatedAt: {job.CreatedAt:HH:mm:ss}\nStartedAt: {startedAt}\nFinishedAt: {finishedAt}";
+        return $"Total time: {totalTime}\nCreatedAt: {job.CreatedAt:HH:mm:ss}\nStartedAt: {startedAt}\nFinishedAt: {finishedAt}";
     }
 }
