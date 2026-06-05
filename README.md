@@ -29,7 +29,7 @@ Completed
 - загальний час виконання
 - часові мітки `CreatedAt`, `StartedAt`, `FinishedAt`
 
-![iOS Simulator](docs/ios_simu.webp width="400")
+<img src="docs/ios_simu.webp" alt="iOS Simulator" width="400">
 
 ## Вимоги
 
