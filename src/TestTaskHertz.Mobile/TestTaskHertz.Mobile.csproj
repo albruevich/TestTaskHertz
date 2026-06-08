@@ -14,6 +14,7 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
     <ValidateXcodeVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">false</ValidateXcodeVersion>
     <MtouchLink Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">SdkOnly</MtouchLink>
+    <NoWarn>$(NoWarn);MT0079</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

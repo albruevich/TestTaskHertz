@@ -2,7 +2,9 @@
 <ContentPage
     x:Class="TestTaskHertz.Mobile.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:TestTaskHertz.Mobile.ViewModels"
+    x:DataType="viewModels:MainViewModel">
     <Grid
         Padding="24"
         RowDefinitions="10,60,60,34,44,48,170,*">
@@ -13,56 +15,53 @@
             HorizontalTextAlignment="Center"
             Text="Тестове для Герц"/>
         <Button
-            x:Name="StartJobButton"
             Grid.Row="2"
             BackgroundColor="#FF2B99ED"
-            Clicked="OnTestButtonClicked"
+            Command="{Binding StartJobCommand}"
             CornerRadius="10"
             FontAttributes="Bold"
             HeightRequest="52"
             HorizontalOptions="Center"
+            IsEnabled="{Binding IsStartButtonEnabled}"
+            Opacity="{Binding StartButtonOpacity}"
             VerticalOptions="Center"
             WidthRequest="200"
             Text="Запустити задачу"
             TextColor="White"/>
         <ActivityIndicator
-            x:Name="JobActivityIndicator"
             Grid.Row="4"
             Color="#FF2B99ED"
             HeightRequest="28"
             HorizontalOptions="Center"
-            IsRunning="False"
-            Opacity="0"
+            IsRunning="{Binding IsActivityIndicatorRunning}"
+            Opacity="{Binding ActivityIndicatorOpacity}"
             VerticalOptions="Center"
             WidthRequest="28"/>
         <Label
-            x:Name="StatusLabel"
             Grid.Row="5"
             FontAttributes="Bold"
             FontSize="18"
             HorizontalTextAlignment="Center"
-            IsVisible="False"
+            IsVisible="{Binding IsStatusVisible}"
             LineBreakMode="WordWrap"
-            Text="Status"
+            Text="{Binding StatusText}"
             VerticalOptions="Center"/>
         <VerticalStackLayout
             Grid.Row="6"
             Spacing="12"
             VerticalOptions="Start">
             <Label
-                x:Name="IdLabel"
                 FontSize="9"
                 HorizontalTextAlignment="Center"
-                IsVisible="False"
+                IsVisible="{Binding IsResultVisible}"
                 LineBreakMode="WordWrap"
-                Text="ID"/>
+                Text="{Binding JobIdText}"/>
             <Label
-                x:Name="ResultLabel"
                 FontSize="13"
                 HorizontalTextAlignment="Center"
-                IsVisible="False"
+                IsVisible="{Binding IsResultVisible}"
                 LineBreakMode="WordWrap"
-                Text="Result"/>
+                Text="{Binding ResultText}"/>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
