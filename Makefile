@@ -1,7 +1,10 @@
 DOTNET_BACKEND ?= $(shell if [ -x /usr/local/opt/dotnet@9/libexec/dotnet ]; then echo /usr/local/opt/dotnet@9/libexec/dotnet; else echo dotnet; fi)
 DOTNET_MOBILE ?= dotnet
 
-.PHONY: b f f-logs api restore build-api
+.PHONY: d b f f-logs api restore build-api
+
+d:
+	docker compose up -d
 
 b api:
 	$(DOTNET_BACKEND) run --no-restore --project src/TestTaskHertz.Api/TestTaskHertz.Api.csproj

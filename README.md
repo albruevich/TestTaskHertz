@@ -50,8 +50,10 @@ docs                       скріншоти для README
 Запустити локальний контейнер PostgreSQL:
 
 ```bash
-docker compose up -d
+make d
 ```
+
+Команда виконує `docker compose up -d`.
 
 Налаштування бази даних:
 
@@ -216,7 +218,7 @@ kill <PID>
 Якщо PostgreSQL недоступна, переконайтеся, що Docker Desktop відкритий і Docker Engine запущений, після цього перезапустіть базу:
 
 ```bash
-docker compose up -d
+make d
 ```
 
 Якщо VS Code показує застарілі MAUI/XAML помилки, але збірка з терміналу успішна:
