@@ -17,13 +17,13 @@
         <Button
             Grid.Row="2"
             BackgroundColor="#FF2B99ED"
-            Command="{Binding StartJobCommand}"
+            Command="{Binding StartJobCommand, Mode=OneWay}"
             CornerRadius="10"
             FontAttributes="Bold"
             HeightRequest="52"
             HorizontalOptions="Center"
-            IsEnabled="{Binding IsStartButtonEnabled}"
-            Opacity="{Binding StartButtonOpacity}"
+            IsEnabled="{Binding IsStartButtonEnabled, Mode=OneWay}"
+            Opacity="{Binding StartButtonOpacity, Mode=OneWay}"
             VerticalOptions="Center"
             WidthRequest="200"
             Text="Запустити задачу"
@@ -33,8 +33,8 @@
             Color="#FF2B99ED"
             HeightRequest="28"
             HorizontalOptions="Center"
-            IsRunning="{Binding IsActivityIndicatorRunning}"
-            Opacity="{Binding ActivityIndicatorOpacity}"
+            IsRunning="{Binding IsActivityIndicatorRunning, Mode=OneWay}"
+            Opacity="{Binding ActivityIndicatorOpacity, Mode=OneWay}"
             VerticalOptions="Center"
             WidthRequest="28"/>
         <Label
@@ -42,9 +42,9 @@
             FontAttributes="Bold"
             FontSize="18"
             HorizontalTextAlignment="Center"
-            IsVisible="{Binding IsStatusVisible}"
+            IsVisible="{Binding IsStatusVisible, Mode=OneWay}"
             LineBreakMode="WordWrap"
-            Text="{Binding StatusText}"
+            Text="{Binding StatusText, Mode=OneWay}"
             VerticalOptions="Center"/>
         <VerticalStackLayout
             Grid.Row="6"
@@ -53,15 +53,15 @@
             <Label
                 FontSize="9"
                 HorizontalTextAlignment="Center"
-                IsVisible="{Binding IsResultVisible}"
+                IsVisible="{Binding IsResultVisible, Mode=OneWay}"
                 LineBreakMode="WordWrap"
-                Text="{Binding JobIdText}"/>
+                Text="{Binding JobIdText, Mode=OneWay}"/>
             <Label
                 FontSize="13"
                 HorizontalTextAlignment="Center"
-                IsVisible="{Binding IsResultVisible}"
+                IsVisible="{Binding IsResultVisible, Mode=OneWay}"
                 LineBreakMode="WordWrap"
-                Text="{Binding ResultText}"/>
+                Text="{Binding ResultText, Mode=OneWay}"/>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
